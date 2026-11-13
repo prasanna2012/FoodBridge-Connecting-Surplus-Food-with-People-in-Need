@@ -1,0 +1,242 @@
+{
+  "info": {
+    "name": "FoodBridge API Collection",
+    "description": "Comprehensive REST API collection for FoodBridge – Smart Food Donation & Redistribution Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login - Admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@foodbridge.org\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Hotel Donor",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"grand.hotel@foodbridge.org\",\n  \"password\": \"donor123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Login - Verified NGO",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"hope.foundation@foodbridge.org\",\n  \"password\": \"ngo123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Register New Donor",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"newdonor@restaurant.com\",\n  \"password\": \"donor123\",\n  \"full_name\": \"Taj Falaknuma Kitchens\",\n  \"role\": \"donor\",\n  \"phone\": \"+91 98765 99999\",\n  \"address\": \"Engine Bowli, Falaknuma\",\n  \"city\": \"Hyderabad\",\n  \"state\": \"Telangana\",\n  \"postal_code\": \"500053\",\n  \"latitude\": 17.3314,\n  \"longitude\": 78.4674\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api", "auth", "register"] }
+          }
+        },
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/me", "host": ["{{baseUrl}}"], "path": ["api", "auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Food Donations",
+      "item": [
+        {
+          "name": "List Available Donations",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/donations?status=available",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "donations"],
+              "query": [{ "key": "status", "value": "available" }]
+            }
+          }
+        },
+        {
+          "name": "Get Donation by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/donations/1", "host": ["{{baseUrl}}"], "path": ["api", "donations", "1"] }
+          }
+        },
+        {
+          "name": "Create Food Donation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Surplus Evening Banquet Rice & Paneer Curry\",\n  \"description\": \"Packed in hygienic insulated food crates.\",\n  \"food_category\": \"cooked_meals\",\n  \"quantity_value\": 30,\n  \"quantity_unit\": \"servings\",\n  \"preparation_time\": \"2026-11-13T16:00:00Z\",\n  \"expiry_deadline\": \"2026-11-13T23:00:00Z\",\n  \"pickup_address\": \"Road 1, Banjara Hills, Hyderabad\",\n  \"pickup_instructions\": \"Kitchen rear entrance\",\n  \"latitude\": 17.4156,\n  \"longitude\": 78.4487,\n  \"storage_condition\": \"hot_holding\",\n  \"allergens\": \"Dairy\",\n  \"safety_declaration_accepted\": true\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/donations", "host": ["{{baseUrl}}"], "path": ["api", "donations"] }
+          }
+        },
+        {
+          "name": "Get My Donor Donations",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/donations/my/donor", "host": ["{{baseUrl}}"], "path": ["api", "donations", "my", "donor"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Requests & Workflow",
+      "item": [
+        {
+          "name": "Claim Donation (NGO)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Our van can collect this in 30 mins.\",\n  \"estimated_pickup_time\": \"2026-11-13T19:30:00Z\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/donations/1/request", "host": ["{{baseUrl}}"], "path": ["api", "donations", "1", "request"] }
+          }
+        },
+        {
+          "name": "Accept Request (Donor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"decision\": \"accepted\",\n  \"decision_notes\": \"Food packed and ready for pickup.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/requests/1/decision", "host": ["{{baseUrl}}"], "path": ["api", "requests", "1", "decision"] }
+          }
+        },
+        {
+          "name": "Mark Ready for Pickup (Donor)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/collections/5/ready", "host": ["{{baseUrl}}"], "path": ["api", "collections", "5", "ready"] }
+          }
+        },
+        {
+          "name": "Verify Handoff with OTP",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"verification_code\": \"582194\",\n  \"temperature_check_celsius\": 65.0,\n  \"transport_method\": \"Insulated Delivery Van\",\n  \"notes\": \"Hygiene seals verified intact.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/collections/5/verify-handoff", "host": ["{{baseUrl}}"], "path": ["api", "collections", "5", "verify-handoff"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics & Overview",
+      "item": [
+        {
+          "name": "Platform Overview Stats",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/analytics/overview", "host": ["{{baseUrl}}"], "path": ["api", "analytics", "overview"] }
+          }
+        },
+        {
+          "name": "Food Category Breakdown",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/analytics/categories", "host": ["{{baseUrl}}"], "path": ["api", "analytics", "categories"] }
+          }
+        },
+        {
+          "name": "Monthly Redistribution Trends",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/analytics/trends", "host": ["{{baseUrl}}"], "path": ["api", "analytics", "trends"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Operations",
+      "item": [
+        {
+          "name": "List Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{authToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/admin/users", "host": ["{{baseUrl}}"], "path": ["api", "admin", "users"] }
+          }
+        },
+        {
+          "name": "Approve NGO Verification",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{authToken}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"verification_status\": \"verified\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/admin/ngos/7/verify", "host": ["{{baseUrl}}"], "path": ["api", "admin", "ngos", "7", "verify"] }
+          }
+        }
+      ]
+    }
+  ]
+}
+
